@@ -8,7 +8,7 @@ This Python script performs real-time emotion recognition using a laptop camera.
 - OpenCV
 - Keras
 - NumPy
-- Flask (for the web UI)
+- Flask
 
 ## Installation
 
