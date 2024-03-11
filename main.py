@@ -35,21 +35,14 @@ def main():
 
     # Define emotions and their corresponding colors
     emotions = ['Angry', 'Disgust', 'Fear', 'Happy', 'Sad', 'Surprise', 'Neutral']
-    # Specify custom colors for each emotion (BGR format)
-    colors = [Angry, Disgust, Fear, Happy, Sad, Surprise, Neutral]
-
-    # Load the cascade for face detection
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-
-    # Start capturing video from the camera
-    cap = cv2.VideoCapture(0)
+    default_colors = ['#FF0000', '#00FFFF', '#0000FF', '#00FF00', '#FF00FF', '#FFFF00', '#808080']
 
     # Set Streamlit page configuration
     st.set_page_config(page_title="Real-time Emotion Prediction", layout="wide")
 
     # Display title and description
     st.title("Real-time Emotion Prediction")
-    
+
     # Create placeholders for buttons and camera feed
     start_button = st.button("Start Camera")
     stop_button = st.button("Stop Camera")
@@ -58,7 +51,33 @@ def main():
     # Variable to track camera status
     camera_running = False
 
+    # Parameters for customization
+    label_font_size = st.sidebar.slider("Label Font Size", 0.1, 1.0, 0.5)    # Font size of the emotion labels on the graph
+    bar_spacing = st.sidebar.slider("Bar Spacing", 5, 20, 10)         # Spacing between adjacent bars on the graph
+    graph_width_ratio = st.sidebar.slider("Graph Width Ratio", 0.1, 1.0, 0.95) # Ratio of the width of the blank space beside the camera window
+
+    # Colors for emotions
+    colors = []
+    for emotion, default_color in zip(emotions, default_colors):
+        color = st.sidebar.color_picker(f"Pick a color for {emotion}", default_color)
+        colors.append(hex_to_bgr(color))
+
+    # Get available camera devices
+    graph = FilterGraph()
+    available_devices = graph.get_input_devices()
+    selected_camera = st.sidebar.selectbox("Select Camera", available_devices)
+
+    # Find index of selected camera name
+    selected_camera_index = available_devices.index(selected_camera) if selected_camera in available_devices else 0
+
     # Main loop for capturing frames and performing emotion prediction
+    cap = cv2.VideoCapture(selected_camera_index)
+
+    # Load the cascade for face detection
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+
+    # Main loop for capturing frames and performing emotion prediction
+    cap = cv2.VideoCapture(selected_camera_index)
     while True:
         if start_button:
             camera_running = True
@@ -113,7 +132,7 @@ def main():
                 cv2.putText(frame, label, (x, y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
 
             # Draw the emotion graph beside the camera window
-            frame_with_graph = draw_emotion_graph(frame, emotions, percentages, colors, graph_width_ratio)
+            frame_with_graph = draw_emotion_graph(frame, emotions, percentages, colors, graph_width_ratio, label_font_size, bar_spacing)
 
             # Display the frame with the graph
             frame_placeholder.image(frame_with_graph, channels="BGR")
