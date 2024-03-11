@@ -8,7 +8,7 @@ def hex_to_bgr(hex_color):
     bgr_color = tuple(int(hex_color[i:i+2], 16) for i in (4, 2, 0))
     return bgr_color
 
-def draw_emotion_graph(frame, emotions, percentages, colors, graph_width_ratio):
+def draw_emotion_graph(frame, emotions, percentages, colors, graph_width_ratio, label_font_size, bar_spacing):
     height, width, _ = frame.shape
     graph_width = int(width * graph_width_ratio)
     graph_area = np.zeros((height, graph_width, 3), dtype=np.uint8)  # Create an area for the graph
@@ -25,6 +25,7 @@ def draw_emotion_graph(frame, emotions, percentages, colors, graph_width_ratio):
     # Combine the graph area with the frame
     frame_with_graph = np.concatenate((frame, graph_area), axis=1)
     return frame_with_graph
+
 
 def main():
     # Load pre-trained Keras model for emotion recognition
