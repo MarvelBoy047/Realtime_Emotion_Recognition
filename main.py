@@ -7,15 +7,6 @@ def hex_to_bgr(hex_color):
     hex_color = hex_color.lstrip('#')
     bgr_color = tuple(int(hex_color[i:i+2], 16) for i in (4, 2, 0))
     return bgr_color
-# Parameters for customization
-label_font_size = 0.5    # Font size of the emotion labels on the graph
-bar_spacing = 10         # Spacing between adjacent bars on the graph
-graph_width_ratio = 0.95 # Ratio of the width of the blank space beside the camera window
-
-# Colors for emotions
-Angry, Disgust, Fear, Happy, Sad, Surprise, Neutral = [(0, 0, 255), (0, 255, 255), (255, 0, 0),
-                                                       (0, 255, 0), (255, 0, 255), (255, 255, 0),
-                                                       (128, 128, 128)]
 
 def draw_emotion_graph(frame, emotions, percentages, colors, graph_width_ratio):
     height, width, _ = frame.shape
