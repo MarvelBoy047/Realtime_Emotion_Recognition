@@ -3,6 +3,10 @@ import cv2
 from keras.models import load_model
 import numpy as np
 
+def hex_to_bgr(hex_color):
+    hex_color = hex_color.lstrip('#')
+    bgr_color = tuple(int(hex_color[i:i+2], 16) for i in (4, 2, 0))
+    return bgr_color
 # Parameters for customization
 label_font_size = 0.5    # Font size of the emotion labels on the graph
 bar_spacing = 10         # Spacing between adjacent bars on the graph
