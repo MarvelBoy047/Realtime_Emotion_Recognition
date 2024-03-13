@@ -8,14 +8,14 @@ This Python script performs real-time emotion recognition using a laptop camera.
 - OpenCV
 - Keras
 - NumPy
-- Flask
+- fastapi
 
 ## Installation
 
 You can install the required Python packages using pip:
 
 ```bash
-pip install opencv-python keras numpy Flask
+pip install opencv-python keras numpy fastapi
 ```
 
 ## Usage
